@@ -29,7 +29,6 @@ public class Movie {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @Column(name = "tags")
     @ManyToMany
     @JoinTable(
             name = "movie_tags",

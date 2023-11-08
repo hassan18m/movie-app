@@ -1,7 +1,7 @@
 package com.movie.app.movie.service;
 
-import com.movie.app.movie.entity.Movie;
 import com.movie.app.movie.entity.enums.CategoryName;
+import com.movie.app.movie.entity.model.AddPictureRequest;
 import com.movie.app.movie.entity.model.MovieRequest;
 import com.movie.app.movie.entity.model.MovieResponse;
 
@@ -14,4 +14,5 @@ public interface MovieService {
 
     List<MovieResponse> getMoviesByCategoryName(CategoryName categoryName);
     List<MovieResponse> getMoviesByTagName(String tagName);
+    MovieResponse addPictureToMetaData(Long movieId, AddPictureRequest addPictureRequest);
 }

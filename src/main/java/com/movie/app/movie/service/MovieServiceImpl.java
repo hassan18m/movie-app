@@ -3,11 +3,9 @@ package com.movie.app.movie.service;
 import com.movie.app.exceptions.InvalidInputException;
 import com.movie.app.exceptions.NotFoundException;
 import com.movie.app.globalhelper.MapEntity;
-import com.movie.app.movie.entity.Genre;
-import com.movie.app.movie.entity.Metadata;
-import com.movie.app.movie.entity.Movie;
-import com.movie.app.movie.entity.Tag;
+import com.movie.app.movie.entity.*;
 import com.movie.app.movie.entity.enums.CategoryName;
+import com.movie.app.movie.entity.model.AddPictureRequest;
 import com.movie.app.movie.entity.model.MovieRequest;
 import com.movie.app.movie.entity.model.MovieResponse;
 import com.movie.app.movie.repository.GenreRepository;
@@ -29,6 +27,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final GenreRepository genreRepository;
     private final TagRepository tagRepository;
+    private final PictureRepository pictureRepository;
 
     @Override
     public MovieResponse addMovie(MovieRequest movieRequest) {
@@ -71,6 +70,25 @@ public class MovieServiceImpl implements MovieService {
                 .stream()
                 .map(MapEntity::movieEntityToResponse)
                 .toList();
+    }
+
+    @Override
+    public MovieResponse addPictureToMetaData(Long movieId, AddPictureRequest addPictureRequest) {
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new NotFoundException("Movie not found!"));
+        Picture picture = new Picture();
+        picture.setUrl(addPictureRequest.getUrl());
+        pictureRepository.save(picture);
+
+        Metadata movieMetadata = movie.getMetadata();
+        Set<Picture> metadataPictures = movieMetadata.getPictures();
+        metadataPictures.add(picture);
+        movieMetadata.setPictures(metadataPictures);
+
+        movie.setMetadata(movieMetadata);
+        movieRepository.save(movie);
+
+        return MapEntity.movieEntityToResponse(movie);
     }
 
 

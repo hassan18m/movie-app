@@ -3,6 +3,7 @@ package com.movie.app.movie.controller;
 import com.movie.app.exceptions.InvalidInputException;
 import com.movie.app.exceptions.NotFoundException;
 import com.movie.app.movie.entity.enums.CategoryName;
+import com.movie.app.movie.entity.model.AddPictureRequest;
 import com.movie.app.movie.entity.model.MovieRequest;
 import com.movie.app.movie.entity.model.MovieResponse;
 import com.movie.app.movie.service.MovieService;
@@ -46,6 +47,16 @@ public class MovieController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InvalidInputException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PostMapping("/{movieId}/addPicture")
+    public ResponseEntity<?> addPictureToMovieMetadata(@PathVariable Long movieId,
+                                                       @RequestBody AddPictureRequest addPictureRequest) {
+        try {
+            return ResponseEntity.ok(movieService.addPictureToMetaData(movieId, addPictureRequest));
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -34,7 +34,7 @@ public class User {
     )
     Set<Movie> favoriteMovies = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "preference_id",referencedColumnName = "id")
     private Preferences preferences;
 }
